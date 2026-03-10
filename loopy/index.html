@@ -1,0 +1,1371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Loopy - Habit Tracker for Lazy People</title>
+  <meta name="description" content="Check habits right from notification. No need to open the app. Built for lazy people like me.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary: #4ECDC4;
+      --primary-light: #E0F7F5;
+      --primary-dark: #45B7AA;
+      --text-primary: #2D3748;
+      --text-secondary: #64748B;
+      --text-muted: #94A3B8;
+      --background: #FAFBFC;
+      --surface: #FFFFFF;
+      --level0: #EBEDF0;
+      --level1: #B2DFDB;
+      --level2: #80CBC4;
+      --level3: #4ECDC4;
+      --level4: #26A69A;
+    }
+
+    body {
+      font-family: 'Be Vietnam Pro', sans-serif;
+      background-color: var(--background);
+      color: var(--text-primary);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .container.narrow {
+      max-width: 800px;
+    }
+
+    /* Header */
+    header {
+      padding: 20px 0;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(250, 251, 252, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 100;
+    }
+
+    header .container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .logo-img {
+      width: 40px;
+      height: 40px;
+    }
+
+    .logo-text {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+    }
+
+    nav a {
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-size: 15px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+
+    nav a:hover {
+      color: var(--text-primary);
+    }
+
+    nav .nav-cta {
+      background: var(--primary);
+      color: white;
+      padding: 10px 20px;
+      border-radius: 8px;
+    }
+
+    nav .nav-cta:hover {
+      background: var(--primary-dark);
+      color: white;
+    }
+
+    /* Hero Section */
+    .hero {
+      padding: 140px 0 80px;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+    }
+
+    .hero .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .hero-content {
+      text-align: left;
+    }
+
+    .version-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .hero h1 {
+      font-size: 48px;
+      font-weight: 700;
+      line-height: 1.15;
+      margin-bottom: 20px;
+    }
+
+    .hero h1 span {
+      color: var(--primary);
+    }
+
+    .hero .subtitle {
+      font-size: 18px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .cta-row {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .cta-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--primary);
+      color: white;
+      padding: 16px 28px;
+      border-radius: 12px;
+      font-size: 16px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: 2px solid transparent;
+    }
+
+    .cta-button:hover {
+      background: var(--primary-dark);
+      color: white;
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(78, 205, 196, 0.3);
+    }
+
+    .cta-info {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Phone Mockup */
+    .hero-phone {
+      display: flex;
+      justify-content: center;
+    }
+
+    .phone-frame {
+      width: 280px;
+      height: 560px;
+      background: linear-gradient(145deg, #2D3748, #1a202c);
+      border-radius: 40px;
+      padding: 12px;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      background: var(--background);
+      border-radius: 32px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 24px;
+    }
+
+    .phone-screen h2 {
+      font-size: 22px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .phone-screen p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      text-align: center;
+      margin-bottom: 24px;
+    }
+
+    /* Notification Stack */
+    .notification-stack {
+      position: relative;
+      width: 100%;
+      height: 180px;
+    }
+
+    .notification-card {
+      position: absolute;
+      left: 0;
+      right: 0;
+      background: var(--surface);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid var(--level0);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+    }
+
+    .notification-card.back {
+      top: 0;
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    .notification-card.front {
+      top: 40px;
+      animation: slideIn 0.5s ease 0.3s both;
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .notif-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .notif-icon {
+      width: 20px;
+      height: 20px;
+      background: var(--primary);
+      border-radius: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif-icon svg {
+      width: 12px;
+      height: 12px;
+      fill: white;
+    }
+
+    .notif-app {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .notif-time {
+      margin-left: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .notif-habit {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-primary);
+      margin-bottom: 10px;
+    }
+
+    .notif-actions {
+      display: flex;
+      gap: 8px;
+    }
+
+    .notif-btn {
+      flex: 1;
+      padding: 8px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 500;
+      text-align: center;
+    }
+
+    .notif-btn.skip {
+      background: var(--surface);
+      border: 1px solid var(--level0);
+      color: var(--text-secondary);
+    }
+
+    .notif-btn.done {
+      background: var(--primary-light);
+      color: var(--primary-dark);
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .notif-btn.done:hover {
+      background: var(--primary);
+      color: white;
+    }
+
+    /* Done animation */
+    .notification-card.checked {
+      animation: checkDone 0.5s ease forwards;
+    }
+
+    .notification-card.checked .notif-btn.done {
+      background: var(--primary);
+      color: white;
+    }
+
+    .notification-card.checked .notif-btn.done::before {
+      content: '✓ ';
+    }
+
+    @keyframes checkDone {
+      0% { transform: scale(1); }
+      30% { transform: scale(1.02); }
+      100% {
+        transform: translateX(100%) scale(0.9);
+        opacity: 0;
+      }
+    }
+
+    /* Back card becomes front after check */
+    .notification-card.back.promote {
+      animation: promoteCard 0.5s ease 0.3s forwards;
+    }
+
+    @keyframes promoteCard {
+      to {
+        top: 40px;
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    .phone-caption {
+      margin-top: 16px;
+      font-size: 11px;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* Story Section */
+    .story {
+      padding: 80px 0;
+    }
+
+    .story-container {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 56px 64px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--level0);
+    }
+
+    .story-grid {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 64px;
+    }
+
+    .story-title-section {
+      position: sticky;
+      top: 120px;
+      align-self: start;
+    }
+
+    .story-title {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.2;
+    }
+
+    .story-title span {
+      color: var(--primary);
+      font-style: italic;
+    }
+
+    .story-content {
+      max-width: 700px;
+    }
+
+    .story-intro {
+      font-size: 18px;
+      color: var(--text-primary);
+      margin-bottom: 32px;
+      font-weight: 600;
+    }
+
+    .reason-item {
+      display: flex;
+      gap: 20px;
+      margin-bottom: 28px;
+    }
+
+    .reason-number {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--primary);
+      min-width: 28px;
+    }
+
+    .reason-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+    }
+
+    .reason-text em {
+      color: var(--primary-dark);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .insight-quote {
+      margin: 28px 0;
+      font-size: 16px;
+      font-style: italic;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .comparison-section {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+      margin: 32px 0;
+    }
+
+    .comparison-item {
+      font-size: 15px;
+    }
+
+    .comparison-label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 1px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      text-transform: uppercase;
+    }
+
+    .comparison-old {
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .strikethrough {
+      text-decoration: line-through;
+    }
+
+    .comparison-new {
+      color: var(--text-primary);
+      line-height: 1.5;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    .icon-x {
+      color: #EF4444;
+      font-weight: 600;
+      text-decoration: none;
+      flex-shrink: 0;
+    }
+
+    .icon-check {
+      color: var(--primary);
+      font-weight: 600;
+      flex-shrink: 0;
+    }
+
+    .story-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 20px;
+      line-height: 1.5;
+    }
+
+    .story-text em {
+      color: var(--primary-dark);
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    .story-cta-text {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-top: 28px;
+    }
+
+    @media (max-width: 768px) {
+      .story-grid {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+
+      .story-title-section {
+        position: static;
+      }
+
+      .story-container {
+        padding: 32px 24px;
+      }
+
+      .comparison-section {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+    }
+
+    /* Features Section */
+    .features {
+      padding: 80px 0;
+      background: var(--background);
+    }
+
+    .features-header {
+      text-align: center;
+      margin-bottom: 48px;
+    }
+
+    .features-header h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+    }
+
+    .features-header h2 span {
+      color: var(--primary);
+      font-style: italic;
+    }
+
+    .features-header p {
+      color: var(--text-secondary);
+      font-size: 16px;
+    }
+
+    .feature-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .feature-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (max-width: 640px) {
+      .feature-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .feature-card {
+      background: var(--surface);
+      border-radius: 20px;
+      padding: 32px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+      border: 1px solid var(--level0);
+      text-align: center;
+    }
+
+    .feature-icon {
+      width: 64px;
+      height: 64px;
+      background: var(--primary-light);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 20px;
+    }
+
+    .feature-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--primary);
+      fill: none;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .feature-card h3 {
+      font-size: 18px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .feature-card p {
+      color: var(--text-secondary);
+      font-size: 14px;
+      line-height: 1.6;
+    }
+
+    /* Charts Preview - Dark Section */
+    .charts-section {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #1a3a38 0%, #2d4a47 100%);
+      color: white;
+    }
+
+    .charts-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
+      align-items: center;
+    }
+
+    .charts-text h2 {
+      font-size: 32px;
+      margin-bottom: 8px;
+      font-weight: 700;
+    }
+
+    .charts-text h2 span {
+      font-style: italic;
+      color: var(--primary);
+    }
+
+    .charts-text .subtitle {
+      font-size: 16px;
+      opacity: 0.8;
+      margin-bottom: 32px;
+      line-height: 1.6;
+    }
+
+    .charts-features {
+      list-style: none;
+    }
+
+    .charts-features li {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      font-size: 15px;
+    }
+
+    .charts-features li::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: var(--primary);
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .charts-preview {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .chart-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 16px;
+      padding: 24px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .chart-card h3 {
+      font-size: 14px;
+      margin-bottom: 16px;
+      font-weight: 600;
+      opacity: 0.9;
+    }
+
+    .radar-preview {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .radar-svg {
+      width: 200px;
+      height: 200px;
+    }
+
+    @media (max-width: 900px) {
+      .charts-section .container {
+        grid-template-columns: 1fr;
+        gap: 40px;
+      }
+
+      .charts-preview {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Contribution Graph Mini */
+    .contrib-graph {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .contrib-week {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .contrib-cell {
+      width: 16px;
+      height: 16px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .contrib-cell.l1 { background: rgba(78, 205, 196, 0.3); }
+    .contrib-cell.l2 { background: rgba(78, 205, 196, 0.5); }
+    .contrib-cell.l3 { background: rgba(78, 205, 196, 0.7); }
+    .contrib-cell.l4 { background: var(--primary); }
+
+    /* Download Section */
+    .download {
+      padding: 80px 0;
+      background: var(--background);
+    }
+
+    .download-card {
+      background: var(--surface);
+      border-radius: 24px;
+      padding: 56px 64px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.04);
+      border: 1px solid var(--level0);
+      text-align: center;
+    }
+
+    .download h2 {
+      font-size: 32px;
+      margin-bottom: 12px;
+      color: var(--text-primary);
+    }
+
+    .download h2 span {
+      color: var(--primary);
+      font-style: italic;
+    }
+
+    .download p {
+      font-size: 16px;
+      color: var(--text-secondary);
+      margin-bottom: 32px;
+      max-width: 400px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .download-button {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--primary);
+      color: white;
+      padding: 18px 36px;
+      border-radius: 14px;
+      font-size: 18px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+
+    .download-button:hover {
+      background: var(--primary-dark);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(78, 205, 196, 0.3);
+    }
+
+    .download-info {
+      margin-top: 16px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+
+    /* Feedback Section */
+    .feedback {
+      padding: 60px 0 80px;
+      text-align: center;
+    }
+
+    .feedback h2 {
+      font-size: 28px;
+      margin-bottom: 16px;
+    }
+
+    .feedback p {
+      color: var(--text-secondary);
+      margin-bottom: 24px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    .feedback-links {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .feedback-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: 2px solid var(--level0);
+      border-radius: 12px;
+      color: var(--text-secondary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: all 0.2s;
+    }
+
+    .feedback-link:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
+    /* Footer */
+    footer {
+      padding: 32px 0;
+      text-align: center;
+      border-top: 1px solid var(--level0);
+    }
+
+    footer p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      .hero .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+        gap: 40px;
+      }
+
+      .hero-content {
+        text-align: center;
+        order: 1;
+      }
+
+      .hero-phone {
+        order: 0;
+      }
+
+      .cta-row {
+        justify-content: center;
+      }
+
+      nav {
+        display: none;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero {
+        padding: 100px 0 40px;
+        min-height: auto;
+      }
+
+      .hero h1 {
+        font-size: 32px;
+      }
+
+      .hero .subtitle {
+        font-size: 16px;
+      }
+
+      .phone-frame {
+        width: 240px;
+        height: 480px;
+      }
+
+      .phone-screen h2 {
+        font-size: 18px;
+      }
+
+      .contrib-preview-cell {
+        width: 16px;
+        height: 16px;
+      }
+
+      .story-card {
+        padding: 32px 24px;
+      }
+
+      .story h2 {
+        font-size: 24px;
+      }
+
+      .download-card {
+        padding: 48px 24px;
+      }
+
+      .download h2 {
+        font-size: 28px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="container">
+      <div class="logo">
+        <img src="logo.svg" alt="Loopy" class="logo-img">
+        <span class="logo-text">Loopy</span>
+      </div>
+      <nav>
+        <a href="#story">Story</a>
+        <a href="#features">Features</a>
+        <a href="#download" class="nav-cta">Download</a>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="container">
+      <div class="hero-content">
+        <span class="version-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/>
+            <polyline points="12 6 12 12 16 14"/>
+          </svg>
+          VERSION 1.0.0
+        </span>
+        <h1>Habit tracker for<br><span>lazy</span> people.</h1>
+        <p class="subtitle">Check habits right on notification. No need to open the app. Built for lazy people like me.</p>
+        <div class="cta-row">
+          <a href="Loopy-v1.0.5.apk" class="cta-button" download>
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+              <polyline points="7 10 12 15 17 10"/>
+              <line x1="12" y1="15" x2="12" y2="3"/>
+            </svg>
+            Download APK
+          </a>
+          <div class="cta-info">
+            Android 8.0+<br>
+            No ads, no fees
+          </div>
+        </div>
+      </div>
+      <div class="hero-phone">
+        <div class="phone-frame">
+          <div class="phone-screen">
+            <h2>A gentle nudge<br>every night</h2>
+            <p>Tap to check. That's it.</p>
+            <div class="notification-stack">
+              <!-- Back notification (faded) -->
+              <div class="notification-card back">
+                <div class="notif-header">
+                  <div class="notif-icon">
+                    <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+                  </div>
+                  <span class="notif-app">LOOPY</span>
+                  <span class="notif-time">21:00</span>
+                </div>
+                <div class="notif-habit">No OT</div>
+                <div class="notif-actions">
+                  <div class="notif-btn skip">Not today</div>
+                  <div class="notif-btn done">Done</div>
+                </div>
+              </div>
+              <!-- Front notification -->
+              <div class="notification-card front">
+                <div class="notif-header">
+                  <div class="notif-icon">
+                    <svg viewBox="0 0 24 24"><rect x="4" y="4" width="6" height="6" rx="1"/><rect x="14" y="4" width="6" height="6" rx="1"/><rect x="4" y="14" width="6" height="6" rx="1"/><rect x="14" y="14" width="6" height="6" rx="1"/></svg>
+                  </div>
+                  <span class="notif-app">LOOPY</span>
+                  <span class="notif-time">21:00</span>
+                </div>
+                <div class="notif-habit">Build apps</div>
+                <div class="notif-actions">
+                  <div class="notif-btn skip">Not today</div>
+                  <div class="notif-btn done">Done</div>
+                </div>
+              </div>
+            </div>
+                      </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="story" id="story">
+    <div class="container">
+      <div class="story-container">
+        <div class="story-grid">
+          <!-- Left: Title -->
+          <div class="story-title-section">
+            <h2 class="story-title">Why I <span>built</span> this</h2>
+          </div>
+
+          <!-- Right: Content -->
+          <div class="story-content">
+            <p class="story-intro">I built this app for two reasons.</p>
+
+            <!-- Reason 01 -->
+            <div class="reason-item">
+              <span class="reason-number">01</span>
+              <p class="reason-text">I'm a PM for a health tracking product — helping chronic patients monitor daily health metrics. Our biggest pain point: <em>users don't log consistently and often drop off</em>.</p>
+            </div>
+
+            <!-- Reason 02 -->
+            <div class="reason-item">
+              <span class="reason-number">02</span>
+              <p class="reason-text">I wanted to track my own yearly goals. Tried habit trackers — quit after 2 weeks. Not because they were bad — <em>I'm just lazy</em>.</p>
+            </div>
+
+            <!-- Insight Quote -->
+            <blockquote class="insight-quote">
+              Then I realized: The problem isn't motivation — it's friction.
+            </blockquote>
+
+            <!-- Solution intro -->
+            <p class="story-text">
+              I became my own case study. Built something different.
+            </p>
+
+            <!-- Comparison -->
+            <div class="comparison-section">
+              <div class="comparison-item">
+                <div class="comparison-label">Old Way</div>
+                <p class="comparison-old"><span class="icon-x">✕</span><span class="strikethrough">Open app → Wait for load → Find habit → Tick → Close. Too many steps.</span></p>
+                <p class="comparison-old"><span class="icon-x">✕</span><span class="strikethrough">Notification pops up → "Later" → Forget.</span></p>
+              </div>
+              <div class="comparison-item">
+                <div class="comparison-label">Loopy Way</div>
+                <p class="comparison-new"><span class="icon-check">✓</span><span>Notification pops up → Tap "Done" right on the notification. No need to open the app.</span></p>
+              </div>
+            </div>
+
+            <!-- Solution text -->
+            <p class="story-text">
+              Now I'm using it myself, observing my own behavior — testing if this approach actually reduces friction, so I can bring insights back to improve our product at work.
+            </p>
+
+            <!-- CTA -->
+            <p class="story-cta-text">
+              Free to try. If you're lazy like me, give it a shot.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="container">
+      <div class="features-header">
+        <h2>Designed for <span>focus</span></h2>
+        <p>We stripped away the noise so you can focus on what matters: your habits.</p>
+      </div>
+
+      <div class="feature-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+              <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+              <path d="M9 12l2 2 4-4" stroke-width="2.5"/>
+            </svg>
+          </div>
+          <h3>Tap on Notification</h3>
+          <p>
+            Tap "Done" right on the notification. No need to open the app. Zero friction.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 7l2 2 4-4"/>
+              <line x1="12" y1="7" x2="20" y2="7"/>
+              <path d="M4 14l2 2 4-4"/>
+              <line x1="12" y1="14" x2="20" y2="14"/>
+              <path d="M4 21l2 2 4-4"/>
+              <line x1="12" y1="21" x2="20" y2="21"/>
+            </svg>
+          </div>
+          <h3>Max 7 Habits</h3>
+          <p>
+            Intentional limit. Focus on what truly matters. No overwhelm.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 2l2.4 7.4H22l-6 4.6 2.3 7L12 17l-6.3 4 2.3-7-6-4.6h7.6z"/>
+            </svg>
+          </div>
+          <h3>No Ads</h3>
+          <p>
+            Clean interface, no distractions. Just you and your habits.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Charts Preview -->
+  <section class="charts-section">
+    <div class="container">
+      <!-- Left: Text -->
+      <div class="charts-text">
+        <h2>Visual Reports<br><span>that inspire</span></h2>
+        <p class="subtitle">Track your progress with beautiful charts. No spreadsheets, no manual counting.</p>
+        <ul class="charts-features">
+          <li>Contribution Graph — Heatmap for each habit</li>
+          <li>Radar Chart — Compare this week vs last week</li>
+        </ul>
+      </div>
+
+      <!-- Right: Charts -->
+      <div class="charts-preview">
+        <div class="chart-card">
+          <h3>Contribution Graph</h3>
+          <div class="contrib-graph" id="contribGraph"></div>
+        </div>
+        <div class="chart-card">
+          <h3>Radar Chart</h3>
+          <div class="radar-preview">
+            <svg class="radar-svg" viewBox="0 0 220 210">
+              <!-- Background circles -->
+              <circle cx="110" cy="105" r="65" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+              <circle cx="110" cy="105" r="48" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1"/>
+              <circle cx="110" cy="105" r="32" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <circle cx="110" cy="105" r="16" fill="none" stroke="rgba(255,255,255,0.08)" stroke-width="1"/>
+
+              <!-- Axis lines from center to each label -->
+              <line x1="110" y1="105" x2="110" y2="40" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="110" y1="105" x2="166" y2="72" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="110" y1="105" x2="166" y2="138" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="110" y1="105" x2="110" y2="170" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="110" y1="105" x2="54" y2="138" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+              <line x1="110" y1="105" x2="54" y2="72" stroke="rgba(255,255,255,0.1)" stroke-width="1"/>
+
+              <!-- This week (teal filled) - points along each axis -->
+              <polygon points="110,47 162,76 156,136 110,145 62,130 71,82" fill="rgba(78,205,196,0.3)" stroke="#4ECDC4" stroke-width="2"/>
+              <!-- This week dots -->
+              <circle cx="110" cy="47" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+              <circle cx="162" cy="76" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+              <circle cx="156" cy="136" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+              <circle cx="110" cy="145" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+              <circle cx="62" cy="130" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+              <circle cx="71" cy="82" r="4" fill="#4ECDC4" stroke="white" stroke-width="1.5"/>
+
+              <!-- Last week (coral dashed) - points along same axes -->
+              <polygon points="110,68 152,86 160,140 110,155 77,129 80,92" fill="none" stroke="#E8998D" stroke-width="1.5" stroke-dasharray="5,3"/>
+              <!-- Last week dots (hollow) -->
+              <circle cx="110" cy="68" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+              <circle cx="152" cy="86" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+              <circle cx="160" cy="140" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+              <circle cx="110" cy="155" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+              <circle cx="77" cy="129" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+              <circle cx="80" cy="92" r="3" fill="none" stroke="#E8998D" stroke-width="1.5"/>
+
+              <!-- Labels -->
+              <text x="110" y="28" text-anchor="middle" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">WATER</text>
+              <text x="178" y="72" text-anchor="start" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">READING</text>
+              <text x="178" y="142" text-anchor="start" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">MEDITATION</text>
+              <text x="110" y="190" text-anchor="middle" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">GYM</text>
+              <text x="42" y="142" text-anchor="end" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">CODING</text>
+              <text x="42" y="72" text-anchor="end" font-size="9" font-weight="500" fill="rgba(255,255,255,0.8)">SLEEP</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download -->
+  <section class="download" id="download">
+    <div class="container">
+      <div class="download-card">
+        <h2>Try it <span>free</span></h2>
+        <p>Free to try. If you're lazy like me, give it a shot.</p>
+
+        <a href="Loopy-v1.0.5.apk" class="download-button" download>
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Download APK for Android
+        </a>
+
+        <p class="download-info">v1.0.5 • Requires Android 6.0+</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Feedback -->
+  <section class="feedback">
+    <div class="container">
+      <h2>Feedback & Suggestions</h2>
+      <p>
+        I'd love to hear your thoughts to make this app better.
+        Every feedback counts!
+      </p>
+
+      <div class="feedback-links">
+        <a href="mailto:linh@example.com" class="feedback-link">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+            <polyline points="22,6 12,13 2,6"/>
+          </svg>
+          Email
+        </a>
+        <a href="https://facebook.com" class="feedback-link" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"/>
+          </svg>
+          Facebook
+        </a>
+        <a href="https://t.me" class="feedback-link" target="_blank">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 5L2 12.5l7 1M21 5l-2.5 15L9 13.5M21 5L9 13.5m0 0V19l3.5-3"/>
+          </svg>
+          Telegram
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="container">
+      <p>Made by Linhlabs • 2025</p>
+    </div>
+  </footer>
+
+  <script>
+    // Generate contribution graph (features section)
+    function generateContribGraph() {
+      const container = document.getElementById('contribGraph');
+      if (!container) return;
+      const weeks = 12;
+      const days = 7;
+      const levels = ['', 'l1', 'l2', 'l3', 'l4'];
+
+      for (let w = 0; w < weeks; w++) {
+        const weekDiv = document.createElement('div');
+        weekDiv.className = 'contrib-week';
+
+        for (let d = 0; d < days; d++) {
+          const cell = document.createElement('div');
+          const rand = Math.random();
+          const recentBonus = (w / weeks) * 0.3;
+          let level = 0;
+          if (rand > 0.7 - recentBonus) level = 4;
+          else if (rand > 0.5 - recentBonus) level = 3;
+          else if (rand > 0.3 - recentBonus) level = 2;
+          else if (rand > 0.15) level = 1;
+
+          cell.className = 'contrib-cell ' + levels[level];
+          weekDiv.appendChild(cell);
+        }
+        container.appendChild(weekDiv);
+      }
+    }
+
+    generateContribGraph();
+
+    // Notification interaction
+    function setupNotificationInteraction() {
+      const frontCard = document.querySelector('.notification-card.front');
+      const backCard = document.querySelector('.notification-card.back');
+      const doneBtn = frontCard?.querySelector('.notif-btn.done');
+
+      if (!doneBtn || !frontCard || !backCard) return;
+
+      doneBtn.addEventListener('click', function() {
+        // Add checked animation to front card
+        frontCard.classList.add('checked');
+
+        // Promote back card to front
+        backCard.classList.add('promote');
+
+        // Reset after animation completes
+        setTimeout(() => {
+          frontCard.classList.remove('checked');
+          backCard.classList.remove('promote');
+        }, 2000);
+      });
+    }
+
+    setupNotificationInteraction();
+  </script>
+
+</body>
+</html>

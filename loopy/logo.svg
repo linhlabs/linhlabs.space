@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FFFFFF"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <filter id="sh" x="-12%" y="-8%" width="130%" height="130%">
+      <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#26A598" flood-opacity="0.15"/>
+    </filter>
+    <clipPath id="clip">
+      <rect x="46" y="46" width="420" height="420" rx="90"/>
+    </clipPath>
+  </defs>
+
+  <!-- Background -->
+  <rect x="46" y="46" width="420" height="420" rx="90" fill="url(#bg)" filter="url(#sh)"/>
+
+  <!-- 4x4 grid, exact colors from uploaded image -->
+  <!-- Cell size: 72, gap: 14, total: 4*72 + 3*14 = 330 -->
+  <!-- Offset: (512-330)/2 = 91 -->
+  <g clip-path="url(#clip)">
+    <!-- Row 1 -->
+    <rect x="91"  y="91"  width="72" height="72" rx="0" fill="#B1DEDB"/>
+    <rect x="177" y="91"  width="72" height="72" rx="0" fill="#4DCDC4"/>
+    <rect x="263" y="91"  width="72" height="72" rx="0" fill="#80CBC3"/>
+    <rect x="349" y="91"  width="72" height="72" rx="0" fill="#E4F4F1"/>
+
+    <!-- Row 2 -->
+    <rect x="91"  y="177" width="72" height="72" rx="0" fill="#26A598"/>
+    <rect x="177" y="177" width="72" height="72" rx="0" fill="#4FCCC2"/>
+    <rect x="263" y="177" width="72" height="72" rx="0" fill="#B1DEDB"/>
+    <rect x="349" y="177" width="72" height="72" rx="0" fill="#80CBC3"/>
+
+    <!-- Row 3 -->
+    <rect x="91"  y="263" width="72" height="72" rx="0" fill="#5ACFC6"/>
+    <rect x="177" y="263" width="72" height="72" rx="0" fill="#B7E0DE"/>
+    <rect x="263" y="263" width="72" height="72" rx="0" fill="#35AAA0"/>
+    <rect x="349" y="263" width="72" height="72" rx="0" fill="#E4F4F1"/>
+
+    <!-- Row 4 -->
+    <rect x="91"  y="349" width="72" height="72" rx="0" fill="#80CBC3"/>
+    <rect x="177" y="349" width="72" height="72" rx="0" fill="#26A598"/>
+    <rect x="263" y="349" width="72" height="72" rx="0" fill="#9AD4CF"/>
+    <rect x="349" y="349" width="72" height="72" rx="0" fill="#CBEEEB"/>
+  </g>
+
+  <!-- Checkmark on darkest cell (row2 col1: #26A598) -->
+  <path d="M107 217 L118 230 L137 205" stroke="white" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
