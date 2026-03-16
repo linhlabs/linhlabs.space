@@ -1,4 +1,10 @@
 {
+  "rewrites": [
+    {
+      "source": "/api/gold-d-eye/:path*",
+      "destination": "/api/gold-d-eye/:path*"
+    }
+  ],
   "headers": [
     {
       "source": "/api/(.*)",
