@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 340 130">
+  <!-- GOLD D. EYE Logo - Clean style with concentric circles eye -->
+
+  <!-- G -->
+  <path d="M5 50 C5 22, 25 2, 52 2 C72 2, 88 14, 92 24 L82 32 C78 24, 66 12, 52 12 C32 12, 17 30, 17 50 C17 70, 32 88, 52 88 C68 88, 78 78, 78 66 L78 55 L52 55 L52 45 L90 45 L90 88 L80 88 L80 80 C72 87, 62 93, 50 93 C22 93, 5 73, 5 50 Z" fill="#DA7756"/>
+
+  <!-- O (Concentric circles eye) -->
+  <g transform="translate(115, 2)">
+    <!-- Outer ring -->
+    <circle cx="45" cy="48" r="44" fill="none" stroke="#DA7756" stroke-width="6"/>
+    <!-- Inner ring -->
+    <circle cx="45" cy="48" r="24" fill="none" stroke="#DA7756" stroke-width="5"/>
+    <!-- Center dot (pupil) -->
+    <circle cx="45" cy="48" r="6" fill="#DA7756"/>
+  </g>
+
+  <!-- L -->
+  <rect x="220" y="5" width="12" height="83" fill="#DA7756"/>
+  <rect x="220" y="78" width="45" height="10" fill="#DA7756"/>
+
+  <!-- D -->
+  <path d="M285 5 L312 5 C340 5, 355 28, 355 48 C355 68, 340 91, 312 91 L285 91 Z M297 15 L297 81 L310 81 C332 81, 343 65, 343 48 C343 31, 332 15, 310 15 Z" fill="#DA7756"/>
+
+  <!-- D. EYE text -->
+  <text x="180" y="118"
+        font-family="Inter, system-ui, sans-serif"
+        font-size="16"
+        font-weight="400"
+        fill="#C4A08A"
+        text-anchor="middle"
+        letter-spacing="8">D. EYE</text>
+</svg>
