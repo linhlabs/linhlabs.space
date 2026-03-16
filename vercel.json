@@ -1,8 +1,8 @@
 {
   "rewrites": [
     {
-      "source": "/api/gold-d-eye/:path*",
-      "destination": "/api/gold-d-eye/:path*"
+      "source": "/api/gold-d-eye/:path(.*)",
+      "destination": "/api/gde?route=:path"
     }
   ],
   "headers": [

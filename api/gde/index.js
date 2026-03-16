@@ -14,8 +14,11 @@ function getParams(req) {
 
 function getPath(req) {
   const url = new URL(req.url, `http://${req.headers.host}`);
-  // Extract path after /api/gold-d-eye/
-  const match = url.pathname.match(/\/api\/gold-d-eye\/(.*)/);
+  // Try route query param first (from rewrite), then path
+  const route = url.searchParams.get('route');
+  if (route) return route.replace(/\/$/, '');
+  // Fallback: extract from pathname
+  const match = url.pathname.match(/\/api\/(?:gold-d-eye|gde)\/(.*)/);
   return match ? match[1].replace(/\/$/, '') : '';
 }
 
